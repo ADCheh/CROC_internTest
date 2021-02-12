@@ -48,7 +48,7 @@ public class Interaction : MonoBehaviour
     {
         if (isClickable)
         {
-            Debug.Log("Click");
+            //Debug.Log("Click");
             ScenarioManager.instance.MakeAction(gameObject);
         }
             
@@ -73,7 +73,7 @@ public class Interaction : MonoBehaviour
             }
 
             transform.localRotation = Quaternion.Euler(xrot, 0, 0);
-            Debug.Log("Rotation");
+            //Debug.Log("Rotation");
             //ScenarioManager.instance.MakeAction(gameObject);
         }
         

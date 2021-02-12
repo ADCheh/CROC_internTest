@@ -7,4 +7,5 @@ public class InteractableObject
 {
     public bool isButton;
     public int id;
+    public GameObject objectFromScene;
 }
