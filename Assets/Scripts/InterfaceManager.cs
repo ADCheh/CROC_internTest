@@ -40,6 +40,7 @@ public class InterfaceManager : MonoBehaviour
         stageDescription.SetActive(false);
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         instructionsPanel.SetActive(true);
         mistakesPanel.SetActive(true);
         сursorPointer.SetActive(true);
@@ -90,6 +91,7 @@ public class InterfaceManager : MonoBehaviour
         currentState = ScenarioManager.instance.GetCurrentState();
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         stageDescription.SetActive(true);
 
         var actionsOnStage = ScenarioManager.instance.GetStages()[currentState[0]];
@@ -119,6 +121,7 @@ public class InterfaceManager : MonoBehaviour
         сursorPointer.SetActive(false);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         failurPanel.SetActive(true);
     }
 }
