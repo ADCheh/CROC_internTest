@@ -63,13 +63,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\InterfaceManager.cs" />
-    <Compile Include="Assets\ScenarioManager.cs" />
     <Compile Include="Assets\Scripts\InteractableObject.cs" />
     <Compile Include="Assets\Scripts\Interaction.cs" />
+    <Compile Include="Assets\Scripts\InterfaceManager.cs" />
     <Compile Include="Assets\Scripts\MouseLook.cs" />
     <Compile Include="Assets\Scripts\Movement.cs" />
+    <Compile Include="Assets\Scripts\ScenarioManager.cs" />
     <Compile Include="Assets\Scripts\ScenarioScript.cs" />
+    <Compile Include="Assets\Scripts\SceneManager.cs" />
     <Reference Include="UnityEngine">
       <HintPath>D:/Unity/2019.4.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
