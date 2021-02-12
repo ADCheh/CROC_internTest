@@ -1,28 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
 
     public CharacterController controller;
 
-    public float speed = 12f;
-    public float gravity = -9.81f;
+    public float speed = 12f; //Скорость движения
+    public float gravity = -9.81f; // Сила гравитации
 
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    public Transform groundCheck; //Объект для проверки нахождения на земле
+    public float groundDistance = 0.4f; //Расстояние проверки
+    public LayerMask groundMask; //Маска для элементов поверхности
 
-    Vector3 velocity;
-    bool isGrounded;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Vector3 velocity; //Скорость перемещения
+    bool isGrounded; //Проверка нахождения на земле
 
-    // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);

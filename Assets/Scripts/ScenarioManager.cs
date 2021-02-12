@@ -6,132 +6,58 @@ using UnityEngine.UI;
 public class ScenarioManager : MonoBehaviour
 {
     public static ScenarioManager instance;
-
     private void Awake()
     {
         instance = this;
     }
 
-    public GameObject[] buttons = new GameObject[6];
-    public GameObject[] wheels = new GameObject[5];
+    public ScenarioScript scenario; //Объект сценария
+    public int maximumMistakes = 3; //Максимально число ошибок
+    public AudioSource failSound;
+    public AudioSource successSound;
 
-    public ScenarioScript scenario;
-    public Text instructionsText;
-    public int maximumMistakes = 3;
+    private List<InteractableObject[]> stages; //Лист этапов с действиями
+    private List<GameObject> playerActions; //Список действий игрока
+    private InteractableObject nextAction; //Следующее необходимое действие
+    private int currentStage = 0; //Текущий этап
+    private int currentAction = 0; //Текущее действие на этапе
+    private int mistakesCounter; // Счетчик ошибок
 
-    private List<GameObject[]> stages;
-    private List<InteractableObject[]> stages_2;
-
-    private static List<GameObject> playerActions;
-
-    private InteractableObject nextAction;
-    private int currentStage = 0;
-    private int currentAction = 0;
-    private int mistakesCounter;
-    
-    // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 0f;
-        stages = new List<GameObject[]>();
 
-        stages_2 = new List<InteractableObject[]>();
-
+        stages = new List<InteractableObject[]>();
         playerActions = new List<GameObject>();
         List<InteractableObject> listOfActions = new List<InteractableObject>();
+
         foreach (var e in scenario.Actions)
             listOfActions.Add(e);
 
-
-        for (var i = 0; i < scenario.stages.Length; i++)
+        for (var i = 0; i < scenario.stages.Length; i++) //Инициализация этапов
         {
             var stage = new InteractableObject[scenario.stages[i]];
-
             for (var j = 0; j < scenario.stages[i]; j++)
             {
                 if (listOfActions[j].isButton)
-                {
                     stage[j] = listOfActions[j];
-                }
                 else
-                {
                     stage[j] = listOfActions[j];
-                }
             }
             listOfActions.RemoveRange(0, scenario.stages[i]);
-            stages_2.Add(stage);
-
+            stages.Add(stage);
         }
-
-        //for (var i = 0; i < scenario.stages.Length; i++)
-        //{
-        //    var stage = new GameObject[scenario.stages[i]];
-            
-        //    for(var j = 0;j< scenario.stages[i]; j++)
-        //    {
-        //        if (listOfActions[j].isButton)
-        //        {
-        //            stage[j] = buttons[listOfActions[j].id];
-        //        }
-        //        else
-        //        {
-        //            stage[j] = wheels[listOfActions[j].id];
-        //        }
-        //    }
-        //    listOfActions.RemoveRange(0, scenario.stages[i]);
-        //    stages.Add(stage);
-
-        //}
-        
-        //foreach(var e in stages)
-        //{
-        //    Debug.Log("Stage Started");
-        //    foreach(var b in e)
-        //    {
-        //        Debug.Log("Action " + b.name);
-        //    }
-        //    Debug.Log("Stage Finished");
-        //}
-
-        //nextAction = stages[currentStage][currentAction];
-        nextAction = stages_2[currentStage][currentAction];
-        Debug.Log(nextAction.objectFromScene.name);
-        
+        nextAction = stages[currentStage][currentAction];    
     }
 
-    
-
-    // Update is called once per frame
-    void Update()
+    public void MakeAction(GameObject actionObject) //Обработка действия
     {
-
-        //TextUpdate();
-        //if (currentAction >= stages_2[currentStage].Length)
-        //{
-        //    currentStage++;
-        //    currentAction = 0;
-        //}
-
-        //if (currentStage > scenario.stages.Length)
-        //    Debug.Log("YOU WIN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    }
-    public void MakeAction(GameObject actionObject)
-    {
-        string objectType;
-        if (nextAction.isButton)
-            objectType = "кнопкой";
-        else
-            objectType = "вентилем";
         playerActions.Add(actionObject);
-        Debug.Log("Action performed on " + actionObject.name);
         if (actionObject.name == nextAction.objectFromScene.name)
         {
-            Debug.Log("Вы выполнили действие с " + objectType + "№" + nextAction.id);
             if (currentAction == scenario.stages[currentStage] - 1)
             {
-                Debug.Log("Вы завершили Этап №" + (currentStage + 1));
                 currentStage++;
-                
                 currentAction = 0;
                 if (currentStage == scenario.stages.Length)
                 {
@@ -142,34 +68,41 @@ public class ScenarioManager : MonoBehaviour
                 InterfaceManager.instance.StageInfo();
             }
             else
+            {
                 currentAction++;
-            //nextAction = stages[currentStage][currentAction];
-            nextAction = stages_2[currentStage][currentAction];
+                successSound.Play();
+            } 
+            nextAction = stages[currentStage][currentAction];
         }
         else
         {
+            failSound.Play();
             mistakesCounter++;
             if (mistakesCounter == maximumMistakes)
                 InterfaceManager.instance.Failure();
-            Debug.Log("CRITICAL ERROR RYAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
     }
 
-    public InteractableObject GetNextAction()
+    public InteractableObject GetNextAction() //Доступ к следующему действию
     {
         return nextAction;
     }
 
-    public int[] GetCurrentState()
+    public int[] GetCurrentState() //Доступ к номеру текущего этапа и действия
     {
         return new int[2] { currentStage, currentAction };
     }
 
-    public int GetMistakes()
+    public int GetMistakes() //Доступ к счетчику ошибок
     {
         return mistakesCounter;
     }
 
+    public List<InteractableObject[]> GetStages() //Доступ к списку этапов и действий
+    {
+        return stages;
+    }
 
-    
+
+
 }
